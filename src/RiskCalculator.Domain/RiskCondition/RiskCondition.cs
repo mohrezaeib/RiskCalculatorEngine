@@ -26,5 +26,5 @@ public class RiskCondition : FullAuditedAggregateRoot<Guid>
     public Operation Operation { get; set; }
     public Guid? ParentId { get; set; }
     public RiskCondition Parent { get; set; }
-    public virtual ICollection<RiskCondition> Children { get; set; }
+    public virtual ICollection<RiskCondition> Subgroup { get; set; }
 }

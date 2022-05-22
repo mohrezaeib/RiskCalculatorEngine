@@ -50,7 +50,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
             FilterMappingTitle = nameof(RiskAssessmentDto.ContactType),
 
             Operation = Operation.Sum,
-            Children = new List<RiskCondition>()
+            Subgroup = new List<RiskCondition>()
             {
                 new RiskCondition(_guidGenerator.Create())
                 {
@@ -60,7 +60,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                     EffectRatio = 1,
                     Type = Type.ListOfLists,
                     Operation = Operation.Sum,
-                    Children = new List<RiskCondition>()
+                    Subgroup = new List<RiskCondition>()
                     {
                         new RiskCondition(_guidGenerator.Create())
                         {
@@ -69,7 +69,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                             EffectRatio = 1.0,
                             Type = Type.ListOfLists,
                             Operation = Operation.Sum,
-                            Children = new List<RiskCondition>()
+                            Subgroup = new List<RiskCondition>()
                             {
                                 new RiskCondition(_guidGenerator.Create())
                                 {
@@ -78,7 +78,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                                     Title = "Employment Status Risk",
                                     Type = Type.ListOfStrings,
                                     Operation = Operation.Sum,
-                                    Children = new List<RiskCondition>()
+                                    Subgroup = new List<RiskCondition>()
                                     {
                                         new RiskCondition(_guidGenerator.Create())
                                         {
@@ -101,7 +101,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                                     Title = "Industries Risk Level",
                                     Type = Type.ListOfRanges,
                                     Operation = Operation.Max,
-                                    Children = new List<RiskCondition>()
+                                    Subgroup = new List<RiskCondition>()
                                     {
                                         new RiskCondition(_guidGenerator.Create())
                                         {
@@ -135,7 +135,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                             Title = "First Party Fraud Risk",
                             EffectRatio = 3,
                             Operation = Operation.Sum,
-                            Children = new List<RiskCondition>()
+                            Subgroup = new List<RiskCondition>()
                             {
                                 new RiskCondition(_guidGenerator.Create())
                                 {
@@ -171,7 +171,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                     EffectRatio = 1,
                     Type = Type.ListOfLists,
                     Operation = Operation.Sum,
-                    Children = new List<RiskCondition>()
+                    Subgroup = new List<RiskCondition>()
                     {
                         new RiskCondition(_guidGenerator.Create())
                         {
@@ -180,7 +180,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                             EffectRatio = 5.0,
                             Type = Type.ListOfLists,
                             Operation = Operation.Sum,
-                            Children = new List<RiskCondition>()
+                            Subgroup = new List<RiskCondition>()
                             {
                                 new RiskCondition(_guidGenerator.Create())
                                 {
@@ -189,7 +189,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                                     Title = "Employment Status Risk",
                                     Type = Type.ListOfStrings,
                                     Operation = Operation.Sum,
-                                    Children = new List<RiskCondition>()
+                                    Subgroup = new List<RiskCondition>()
                                     {
                                         new RiskCondition(_guidGenerator.Create())
                                         {
@@ -210,7 +210,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                                     Title = "Industries Risk Level",
                                     Type = Type.ListOfRanges,
                                     Operation = Operation.Max,
-                                    Children = new List<RiskCondition>()
+                                    Subgroup = new List<RiskCondition>()
                                     {
                                         new RiskCondition(_guidGenerator.Create())
                                         {
@@ -244,7 +244,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                             Title = "First Party Fraud Risk",
                             EffectRatio = 0.25,
                             Operation = Operation.Sum,
-                            Children = new List<RiskCondition>()
+                            Subgroup = new List<RiskCondition>()
                             {
                                 new RiskCondition(_guidGenerator.Create())
                                 {

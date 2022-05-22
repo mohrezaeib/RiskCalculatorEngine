@@ -82,7 +82,7 @@ public class RiskCalculatorDbContext :
         //    //...
         //});
         builder.Entity<RiskCondition>(a =>
-                a.HasMany(x => x.Children)
+                a.HasMany(x => x.Subgroup)
                 .WithOne(x => x.Parent)
                 .HasForeignKey(x => x.ParentId)
                 .OnDelete(DeleteBehavior.NoAction)

@@ -54,30 +54,36 @@ public class RiskConditionAppService : ApplicationService, IRiskConditionAppServ
         {
             return new RiskAssessmentResultDto()
             {
-                //This Tell us What kind of Risk we are calculating
+                //This Tell us if there is no condition for particular field
                 Title = $"No Condition Found For {value}",
             };
         }
+
         var scores = new List<double>();
         var result = new RiskAssessmentResultDto()
         {
             //This Tell us What kind of Risk we are calculating
             Title = rootCondition.Title,
-            Children = new List<RiskAssessmentResultDto>(),
+            Subgroup = new List<RiskAssessmentResultDto>(),
         };
 
         if (rootCondition.Type == Type.ListOfLists)
         {
             foreach (var prop in value.GetType().GetProperties())
             {
-                var condition = rootCondition.Children?.FirstOrDefault(x => x.MappingTitle == prop.Name);
+                var condition = rootCondition.Subgroup?.FirstOrDefault(x => x.MappingTitle == prop.Name);
                 var propertyValue = prop.GetValue(value, null);
                 if (condition != null)
                 {
                     // This is a recursive Function 
-                    var childRisks = Calculate(condition, propertyValue);
-                    result.Children.Add(childRisks);
-                    scores.Add(childRisks.EffectiveRiskScore);
+                    var subgroupRiskResults = Calculate(condition, propertyValue);
+                    result.Subgroup.Add(subgroupRiskResults);
+                    scores.Add(subgroupRiskResults.EffectiveRiskScore);
+                }
+                else
+                {
+                    //Only for debuging 
+                    result.Messages = $"No Condition defined For: {propertyValue}";
                 }
             }
         }
@@ -85,13 +91,13 @@ public class RiskConditionAppService : ApplicationService, IRiskConditionAppServ
         if (rootCondition.Type == Type.FilterByConstantString)
         {
             var prop = value.GetType().GetProperties().FirstOrDefault(x => rootCondition.FilterMappingTitle == x.Name);
-            var propertyValue = prop.GetValue(value, null);
+            var propertyValue = prop?.GetValue(value, null);
 
-            var condition = rootCondition.Children.FirstOrDefault(x => x.FilterValue == (string) propertyValue);
+            var condition = rootCondition.Subgroup?.FirstOrDefault(x => x.FilterValue == (string) propertyValue);
             // This is a recursive Function 
-            var childRisks = Calculate(condition, value);
-            result.Children.Add(childRisks);
-            scores.Add(childRisks.EffectiveRiskScore);
+            var subgroupRiskResult = Calculate(condition, value);
+            result.Subgroup.Add(subgroupRiskResult);
+            scores.Add(subgroupRiskResult.EffectiveRiskScore);
         }
 
         if (rootCondition.Type == Type.ListOfStrings)
@@ -99,8 +105,16 @@ public class RiskConditionAppService : ApplicationService, IRiskConditionAppServ
             var castedValues = (List<string>) value;
             foreach (var castedValue in castedValues)
             {
-                var childCondition = rootCondition.Children.FirstOrDefault(x => x.ConstantString == castedValue);
-                scores.Add(childCondition.Score);
+                var condition = rootCondition.Subgroup?.FirstOrDefault(x => x.ConstantString == castedValue);
+
+                if (condition != null)
+                {
+                    scores.Add(condition.Score);
+                }
+                else
+                {
+                    result.Messages = $"No Condition defined For: {castedValue}";
+                }
             }
         }
 
@@ -109,9 +123,17 @@ public class RiskConditionAppService : ApplicationService, IRiskConditionAppServ
             var castedValues = (List<double>) value;
             foreach (var castedValue in castedValues)
             {
-                var childCondition = rootCondition.Children.FirstOrDefault(x => x.StartRange <= (double) castedValue
-                    && x.EndRange >= (double) castedValue);
-                scores.Add(childCondition.Score);
+                var condition = rootCondition.Subgroup?.FirstOrDefault(x => x.StartRange <=  castedValue
+                                                                            && x.EndRange >=  castedValue);
+
+                if (condition != null)
+                {
+                    scores.Add(condition.Score);
+                }
+                else
+                {
+                    result.Messages = $"No Condition defined For: {castedValue}";
+                }
             }
         }
 
@@ -119,17 +141,31 @@ public class RiskConditionAppService : ApplicationService, IRiskConditionAppServ
         if (rootCondition.Type == Type.Range)
         {
             var castedValue = (double) value;
-            var childCondition = rootCondition.Children.FirstOrDefault(x => x.StartRange <= (double) castedValue
-                                                                            && x.EndRange >= (double) castedValue);
-            scores.Add(childCondition.Score);
+            var condition = rootCondition.Subgroup?.FirstOrDefault(x => x.StartRange <= (double) castedValue
+                                                                        && x.EndRange >= (double) castedValue);
+            if (condition != null)
+            {
+                scores.Add(condition.Score);
+            }
+            else
+            {
+                result.Messages = $"No Condition defined For {castedValue}";
+            }
         }
 
 
         if (rootCondition.Type == Type.ConstantString)
         {
             var castedValue = (string) value;
-            var childCondition = rootCondition.Children.FirstOrDefault(x => x.ConstantString == castedValue);
-            scores.Add(childCondition.Score);
+            var condition = rootCondition.Subgroup?.FirstOrDefault(x => x.ConstantString == castedValue);
+            if (condition != null)
+            {
+                scores.Add(condition.Score);
+            }
+            else
+            {
+                result.Messages = $"No Condition defined For {castedValue}";
+            }
         }
 
         result.RiskScore = ApplyOperator(scores, rootCondition.Operation);
@@ -140,6 +176,10 @@ public class RiskConditionAppService : ApplicationService, IRiskConditionAppServ
 
     private static double ApplyOperator(List<double> scores, Operation operation)
     {
+        if (scores.IsNullOrEmpty())
+        {
+            return 0;
+        }
         switch (operation)
         {
             case Operation.Sum: return scores.Sum();
@@ -157,6 +197,8 @@ public class RiskAssessmentResultDto
     public string Title { get; set; }
     public double EffectiveRiskScore { get; set; }
     public double RiskScore { get; set; }
+    public string Messages { get; set; }
 
-    public List<RiskAssessmentResultDto> Children { get; set; }
+
+    public List<RiskAssessmentResultDto> Subgroup { get; set; }
 }
