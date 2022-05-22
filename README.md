@@ -11,3 +11,5 @@ Conditional Risk rules based on certain filter ==> for example if the input Cont
 Look more into FilterByConstantString
 
 
+This Project is based on ABP.io template 
+for running first run DbMigrator project and the HostAPI project
