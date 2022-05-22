@@ -7,5 +7,5 @@ public enum Type
     ListOfRanges,
     Range,
     ConstantString,
-    DivideByConstantString
+    FilterByConstantString
 }

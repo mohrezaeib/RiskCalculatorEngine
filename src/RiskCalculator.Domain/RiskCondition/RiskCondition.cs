@@ -17,8 +17,8 @@ public class RiskCondition : FullAuditedAggregateRoot<Guid>
     public double? StartRange { get; set; }
     public double? EndRange { get; set; }
     public string ConstantString { get; set; }
-    public string DivideFilter { get; set; }
-    public string DivideValue { get; set; }
+    public string FilterMappingTitle { get; set; }
+    public string FilterValue { get; set; }
     public double Score { get; set; }
     public double EffectRatio { get; set; }
 

@@ -46,8 +46,8 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
             // and input value "Personal" only child condition  with value "Personal" 
             // are used in risk calculation
 
-            Type = Type.DivideByConstantString,
-            DivideFilter = nameof(RiskAssessmentDto.ContactType),
+            Type = Type.FilterByConstantString,
+            FilterMappingTitle = nameof(RiskAssessmentDto.ContactType),
 
             Operation = Operation.Sum,
             Children = new List<RiskCondition>()
@@ -56,7 +56,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                 {
                     MappingTitle = nameof(RiskAssessmentDto),
                     Title = "Personal Contact Risk",
-                    DivideValue = "Personal",
+                    FilterValue = "Personal",
                     EffectRatio = 1,
                     Type = Type.ListOfLists,
                     Operation = Operation.Sum,
@@ -167,7 +167,7 @@ public class RiskConditionSeeder : IDataSeedContributor, ITransientDependency
                 {
                     MappingTitle = nameof(RiskAssessmentDto),
                     Title = "Business Contact Risk",
-                    DivideValue = "Business",
+                    FilterValue = "Business",
                     EffectRatio = 1,
                     Type = Type.ListOfLists,
                     Operation = Operation.Sum,

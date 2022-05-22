@@ -82,12 +82,12 @@ public class RiskConditionAppService : ApplicationService, IRiskConditionAppServ
             }
         }
 
-        if (rootCondition.Type == Type.DivideByConstantString)
+        if (rootCondition.Type == Type.FilterByConstantString)
         {
-            var prop = value.GetType().GetProperties().FirstOrDefault(x => rootCondition.DivideFilter == x.Name);
+            var prop = value.GetType().GetProperties().FirstOrDefault(x => rootCondition.FilterMappingTitle == x.Name);
             var propertyValue = prop.GetValue(value, null);
 
-            var condition = rootCondition.Children.FirstOrDefault(x => x.DivideValue == (string) propertyValue);
+            var condition = rootCondition.Children.FirstOrDefault(x => x.FilterValue == (string) propertyValue);
             // This is a recursive Function 
             var childRisks = Calculate(condition, value);
             result.Children.Add(childRisks);
